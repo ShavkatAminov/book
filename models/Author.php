@@ -10,10 +10,10 @@ use Yii;
  * @property int $id
  * @property string $name Имя
  * @property string $description Биография
- * @property int $birth_date Дата рождения
- * @property int|null $death_date Дата смерти
+ * @property string $birth_date Дата рождения
+ * @property string|null $death_date Дата смерти
  *
- * @property BookAuthor[] $bookAuthors
+ * @property Book[] $books
  */
 class Author extends \yii\db\ActiveRecord
 {
@@ -33,7 +33,7 @@ class Author extends \yii\db\ActiveRecord
         return [
             [['name', 'description', 'birth_date'], 'required'],
             [['description'], 'string'],
-            [['birth_date', 'death_date'], 'integer'],
+            [['birth_date', 'death_date'], 'safe'],
             [['name'], 'string', 'max' => 100],
         ];
     }
@@ -52,13 +52,8 @@ class Author extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[BookAuthors]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBookAuthors()
-    {
-        return $this->hasMany(BookAuthor::className(), ['author_id' => 'id']);
+    public function getBooks() {
+        return $this->hasMany(Book::className(), ['id' => 'book_id'])
+            ->viaTable('book_author', ['author_id' => 'id']);
     }
 }

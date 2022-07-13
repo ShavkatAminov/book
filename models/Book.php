@@ -13,8 +13,8 @@ use Yii;
  * @property int|null $favorite Избранное
  * @property string $image Картинка
  *
- * @property Attribute[] $attributes0
- * @property BookAuthor[] $bookAuthors
+ * @property Attribute[] $allAttributes
+ * @property Author[] $authors
  */
 class Book extends \yii\db\ActiveRecord
 {
@@ -55,22 +55,17 @@ class Book extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Attributes0]].
+     * Gets query for [[Attributes]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getAttributes0()
+    public function getAllAttributes()
     {
         return $this->hasMany(Attribute::className(), ['book_id' => 'id']);
     }
 
-    /**
-     * Gets query for [[BookAuthors]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBookAuthors()
-    {
-        return $this->hasMany(BookAuthor::className(), ['book_id' => 'id']);
+    public function getAuthors() {
+        return $this->hasMany(Author::className(), ['id' => 'author_id'])
+            ->viaTable('book_author', ['book_id' => 'id']);
     }
 }

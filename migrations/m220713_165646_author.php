@@ -16,8 +16,8 @@ class m220713_165646_author extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string(100)->notNull()->comment('Имя'),
             'description' => $this->text()->notNull()->comment('Биография'),
-            'birth_date' => $this->integer()->notNull()->comment('Дата рождения'),
-            'death_date' => $this->integer()->comment('Дата смерти'),
+            'birth_date' => $this->date()->notNull()->comment('Дата рождения'),
+            'death_date' => $this->date()->comment('Дата смерти'),
         ]);
     }
 
