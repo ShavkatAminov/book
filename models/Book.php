@@ -26,6 +26,9 @@ class Book extends \yii\db\ActiveRecord
         return 'book';
     }
 
+    public $authorName;
+    public $authorId;
+
     /**
      * {@inheritdoc}
      */

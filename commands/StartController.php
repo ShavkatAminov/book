@@ -20,25 +20,26 @@ class StartController extends Controller
 {
     public function actionIndex()
     {
-        $books = [];
+        $authors = [];
+        for($i = 0; $i < 10; $i ++) {
+            $faker = Factory::create();
+            $author = $this->createAuthor($faker);
+            $authors[] = $author;
+
+        }
         for($i = 0; $i < 100; $i ++) {
             $faker = Factory::create();
             $book = $this->createBook($faker);
-            $books[] = $book;
             $random = $faker->randomDigit();
             while ($random > 0) {
                 $random --;
                 $faker = Factory::create();
                 $this->createAttribute($book->id, $faker);
             }
-        }
-        for($i = 0; $i < 10; $i ++) {
-            $faker = Factory::create();
-            $author = $this->createAuthor($faker);
-            $random = $faker->randomDigit();
-            shuffle($books);
-            foreach ($books as $book) {
-                $author->link('books', $book);
+            $random = $faker->randomDigit() + 1;
+            shuffle($authors);
+            foreach ($authors as $author) {
+                $book->link('authors', $author);
                 $random --;
                 if($random == 0)
                     break;

@@ -48,7 +48,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Book::find(),
+            'query' => Book::find()->joinWith(['authors'])
+            ->select('book.*, author.name as authorName, author.id as authorId')
+            ->groupBy(['id']),
             'pagination' => [
                 'pageSize' => 8,
             ],
