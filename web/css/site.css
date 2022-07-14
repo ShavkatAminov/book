@@ -82,3 +82,12 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+.pinned-star {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 2;
+}
+.pinned-star img {
+    width: 20px;
+}

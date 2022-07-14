@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Author;
 use app\models\Book;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -57,6 +58,45 @@ class SiteController extends Controller
         ]);
         return $this->render('index', [
             'listDataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Displays BookPage.
+     *
+     * @return string
+     */
+    public function actionBook($id)
+    {
+       $model = Book::findOne($id);
+        return $this->render('book', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Displays AuthorPage.
+     *
+     * @return string
+     */
+    public function actionAuthor($id)
+    {
+       $model = Author::findOne($id);
+        return $this->render('author', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Displays AuthorPage.
+     *
+     * @return string
+     */
+    public function actionFavorite($id)
+    {
+       $model = Author::findOne($id);
+        return $this->render('author', [
+            'model' => $model,
         ]);
     }
 }
