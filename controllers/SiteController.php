@@ -4,17 +4,22 @@ namespace app\controllers;
 
 use app\models\Author;
 use app\models\Book;
+use app\service\BookService;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
+    private BookService $bookService ;
+    public function __construct($id, $module, BookService $bookService, $config = [])
+    {
+        $this->bookService = $bookService;
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -49,9 +54,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Book::find()->joinWith(['authors'])
-            ->select('book.*, author.name as authorName, author.id as authorId')
-            ->groupBy(['id']),
+            'query' => $this->bookService->getBookListQuery(),
             'pagination' => [
                 'pageSize' => 8,
             ],
@@ -69,6 +72,8 @@ class SiteController extends Controller
     public function actionBook($id)
     {
        $model = Book::findOne($id);
+        if(!$model)
+            $this->ThrowNotFoundExeption();
         return $this->render('book', [
             'model' => $model,
         ]);
@@ -82,6 +87,8 @@ class SiteController extends Controller
     public function actionAuthor($id)
     {
        $model = Author::findOne($id);
+       if(!$model)
+           $this->ThrowNotFoundExeption();
         return $this->render('author', [
             'model' => $model,
         ]);
@@ -94,9 +101,16 @@ class SiteController extends Controller
      */
     public function actionFavorite($id)
     {
-       $model = Author::findOne($id);
-        return $this->render('author', [
-            'model' => $model,
-        ]);
+       $model = Book::findOne($id);
+       if($model && $this->bookService->changeFavorite($model)) {
+           return "1";
+       }
+       else {
+           $this->ThrowNotFoundExeption();
+       }
+    }
+
+    public function ThrowNotFoundExeption() {
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
